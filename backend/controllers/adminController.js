@@ -14,10 +14,10 @@ const adminController = {
             if (password === admin.password) {
                 var token = jwt.sign({ admin_id: admin._id }, process.env.SECRET_KEY, { expiresIn: "1h" });
                 res.cookie('admin_token', token, {
-                    httpOnly: false,
-                    secure: true,  
-                  maxAge: 24 * 60 * 60 * 1000,
-                    sameSite: 'Lax',
+                    httpOnly: true,
+                    secure: true,
+                    maxAge: 24 * 60 * 60 * 1000,
+                    sameSite: 'None',
                     path: '/',
                 });
 
