@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "bootstrap": "^5.3.5",
+    "concurrently": "^9.1.2",
+    "react-bootstrap": "^2.10.9"
+  },
+  "scripts": {
+    "start": "concurrently \"cd frontend && npm run dev\" \"cd backend && node --watch index\""
+  }
+}
