@@ -17,7 +17,7 @@ server.use(express.static("public"));
 // Middleware
 server.use(express.json());
 server.use(cookieParser());
-server.use(cors({ origin: "https://ishop-backend-nu.vercel.app/", credentials: true }));
+server.use(cors({ origin: "https://ishop-backend-nu.vercel.app", credentials: true }));
 
 server.use("/category", CategoryRouter);
 server.use("/color", colorRouter);
