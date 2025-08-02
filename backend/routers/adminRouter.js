@@ -5,9 +5,9 @@ const AdminRouter = express.Router();
 AdminRouter.post("/login", adminController.login);
 AdminRouter.get("/logout", (req, res) => {
     res.clearCookie("admin_token", {
-        httpOnly: false,
+        httpOnly: true,
         secure: true, // true if using HTTPS
-        sameSite: 'Lax',
+        sameSite: 'None',
         path: '/',      // this is CRUCIAL
     });
     res.status(200).send({ message: "Logged out" });
