@@ -17,7 +17,12 @@ server.use(express.static("public"));
 // Middleware
 server.use(express.json());
 server.use(cookieParser());
-server.use(cors({ origin: "https://ishop-backend-nu.vercel.app", credentials: true }));
+server.use(cors({
+    origin: "https://ishop-backend-nu.vercel.app",
+    credentials: true,
+    allowedHeaders: ["Content-Type"], // removed "Authorization"
+    methods: ["GET", "POST", "PUT", "DELETE"],
+}));
 
 server.use("/category", CategoryRouter);
 server.use("/color", colorRouter);
@@ -30,12 +35,12 @@ server.use("/order", OrderRouter);
 // ✅ MongoDB Atlas Connection
 mongoose.connect(process.env.MONGO_URI, {
 })
-.then(() => {
-    server.listen(5000, () => {
-        console.log("Server is running on http://localhost:5000");
+    .then(() => {
+        server.listen(5000, () => {
+            console.log("Server is running on http://localhost:5000");
+        });
+        console.log('MongoDB Atlas connected successfully');
+    })
+    .catch((err) => {
+        console.error('MongoDB connection error:', err);
     });
-    console.log('MongoDB Atlas connected successfully');
-})
-.catch((err) => {
-    console.error('MongoDB connection error:', err);
-});
