@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { axiosApiInstance } from '../library/helper';
+import { axiosApiInstance, notify } from '../library/helper';
 import { useRouter } from 'next/navigation';
 
 export default function AdminLogin() {
@@ -19,12 +19,16 @@ export default function AdminLogin() {
                 if (res.data.flag === 1) {
                     localStorage.setItem("admin", JSON.stringify(res.data.admin));
                     localStorage.setItem("loginAt", new Date());
+                    notify("Login successful", 1)
                     router.push("/admin")
+                } else {
+                    notify(res.data.msg || "Login failed", 0);
                 }
             }
         ).catch(
             (err) => {
-                console.log(err)
+                console.log(err);
+                notify("Server error", 0);
             }
         )
     };
