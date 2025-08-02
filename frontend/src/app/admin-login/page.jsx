@@ -17,8 +17,8 @@ export default function AdminLogin() {
             (res) => {
                 console.log(res)
                 if (res.data.flag === 1) {
-                    // localStorage.setItem("admin", JSON.stringify(res.data.admin));
-                    // localStorage.setItem("loginAt", new Date());
+                    localStorage.setItem("admin", JSON.stringify(res.data.admin));
+                    localStorage.setItem("loginAt", new Date());
                     router.push("/admin")
                 }
             }
