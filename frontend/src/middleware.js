@@ -1,22 +1,21 @@
+// middleware.js
 import { NextResponse } from 'next/server';
 
-// Middleware to protect admin routes
 export function middleware(req) {
   const { pathname } = req.nextUrl;
 
-  // Protect routes starting with /admin
   if (pathname.startsWith('/admin')) {
     const admin_token = req.cookies.get('admin_token')?.value;
+    console.log('Middleware checking admin_token:', admin_token); // ADD THIS LOG
 
-    // Redirect to login if admin_id is missing
     if (!admin_token) {
+      console.log('Middleware: Redirecting to /admin-login due to missing token'); // ADD THIS LOG
       return NextResponse.redirect(new URL('/admin-login', req.url));
     }
   }
   return NextResponse.next();
 }
 
-// Apply middleware only to /admin routes
 export const config = {
   matcher: '/admin/:path*',
 };
