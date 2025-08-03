@@ -1,5 +1,5 @@
  
-import React, { Suspense } from "react"; // Ensure Suspense is imported
+import React, { Suspense } from "react"; //  
 import AdminLogin from "./AdminloginPage";
 
 export default function AdminLoginPage() {  
