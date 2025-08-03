@@ -1,10 +1,19 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { axiosApiInstance, notify } from '../library/helper';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function AdminLogin() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+
+    useEffect(() => {
+        const adminData = localStorage.getItem("admin");
+
+        if (adminData) {
+            router.replace('/admin');
+        }
+    }, [router, searchParams]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
