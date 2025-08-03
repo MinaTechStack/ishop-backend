@@ -13,12 +13,9 @@ export default function AdminLogin() {
         const adminData = localStorage.getItem("admin");
 
         if (adminData) {
-            // If adminData exists, and we are on /admin-login, redirect to /admin
-            // This redirect in useEffect handles cases where the user might directly type
-            // /admin-login while already logged in. The middleware will also handle this.
             router.replace('/admin');
         }
-    }, [router, searchParams]); // searchParams dependency added for completeness, though not strictly used here for initial redirect
+    }, [router, searchParams]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -29,20 +26,14 @@ export default function AdminLogin() {
 
         axiosApiInstance.post("admin/login", data, { withCredentials: true }).then(
             (res) => {
-                console.log("Login API Response:", res); // Debug log
+                console.log("Login API Response:", res);
                 if (res.data.flag === 1) {
                     localStorage.setItem("admin", JSON.stringify(res.data.admin));
                     localStorage.setItem("loginAt", new Date());
-                    // --- NEW CRUCIAL LINE ---
-                    // Store the raw admin token string in localStorage as a fallback.
-                    // This is accessible by client-side JS but is a workaround for middleware issues.
-                    localStorage.setItem("admin_token_fallback", res.data.token);
+                    localStorage.setItem("admin_token_fallback", res.data.token); // Store the token string
 
                     notify("Login successful", 1);
-                    // --- NEW CRUCIAL LINE ---
-                    // Redirect to /admin, passing the token as a query parameter.
-                    // The middleware will attempt to read this if req.cookies doesn't work.
-                    router.push(`/admin?token=${res.data.token}`);
+                    router.push(`/admin?token=${res.data.token}`); // Pass the token as query param
                 } else {
                     notify(res.data.msg || "Login failed", 0);
                 }
