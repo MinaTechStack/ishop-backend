@@ -3,54 +3,55 @@
 'use client';
 import React, { useEffect } from 'react';
 import { axiosApiInstance, notify } from '../library/helper';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 export default function AdminLogin() {
     const router = useRouter();
-    const searchParams = useSearchParams();
 
     useEffect(() => {
         const adminData = localStorage.getItem("admin");
-
         if (adminData) {
-            router.replace('/admin');
+            router.replace('/admin'); // Redirect if already logged in via localStorage
         }
-    }, [router, searchParams]);
+    }, [router]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const data = {
             email: e.target.email.value,
             password: e.target.password.value
         }
 
-        axiosApiInstance.post("admin/login", data, { withCredentials: true }).then(
-            (res) => {
-                console.log("Login API Response from AdminLogin.js:", res);
-                if (res.data.flag === 1) {
-                    localStorage.setItem("admin", JSON.stringify(res.data.admin));
-                    localStorage.setItem("loginAt", new Date());
+        try {
+            const res = await axiosApiInstance.post("admin/login", data, { withCredentials: true });
+            console.log("Login API Response from AdminLogin.js:", res); 
 
-                    // --- CRITICAL CORRECTION HERE: Access token as res.data.admin.token ---
-                    const receivedToken = res.data.admin.token;
-                    console.log("Token received from backend for localStorage and URL:", receivedToken); 
-                    localStorage.setItem("admin_token_fallback", receivedToken); // Use the corrected variable
+            if (res.data.flag === 1) {
+                localStorage.setItem("admin", JSON.stringify(res.data.admin));
+                localStorage.setItem("loginAt", new Date());
 
+                const receivedToken = res.data.admin.token;
+                console.log("Client-side: Token received from backend:", receivedToken); 
+
+                if (receivedToken && typeof receivedToken === 'string') {
+                    localStorage.setItem("admin_token_fallback", receivedToken); 
                     notify("Login successful", 1);
-                    router.push(`/admin?token=${receivedToken}`); // Use the corrected variable
+                    router.push('/admin'); 
                 } else {
-                    notify(res.data.msg || "Login failed", 0);
+                    console.error("Client-side: Token is not a valid string or is missing:", receivedToken);
+                    notify("Login failed: Invalid token received", 0);
                 }
+            } else {
+                notify(res.data.msg || "Login failed", 0);
             }
-        ).catch(
-            (err) => {
-                console.log("Login API Error:", err);
-                notify("Server error", 0);
-            }
-        )
+        } catch (err) {
+            console.log("Login API Error:", err);
+            notify("Server error", 0);
+        }
     };
 
     return (
+        // ... (rest of your component remains the same)
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
             <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
                 <h2 className="text-2xl font-bold text-center text-gray-800">Admin Login</h2>
