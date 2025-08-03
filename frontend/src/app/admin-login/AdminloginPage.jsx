@@ -26,18 +26,18 @@ export default function AdminLogin() {
 
         axiosApiInstance.post("admin/login", data, { withCredentials: true }).then(
             (res) => {
-                // Keep this log to see the full backend response in browser console
-                console.log("Login API Response from AdminLogin.js:", res); 
+                console.log("Login API Response from AdminLogin.js:", res);
                 if (res.data.flag === 1) {
                     localStorage.setItem("admin", JSON.stringify(res.data.admin));
                     localStorage.setItem("loginAt", new Date());
 
-                    // --- CRITICAL DEBUG LOG: Verify the token value here ---
-                    console.log("Token received from backend for localStorage and URL:", res.data.token); 
-                    localStorage.setItem("admin_token_fallback", res.data.token);
+                    // --- CRITICAL CORRECTION HERE: Access token as res.data.admin.token ---
+                    const receivedToken = res.data.admin.token;
+                    console.log("Token received from backend for localStorage and URL:", receivedToken); 
+                    localStorage.setItem("admin_token_fallback", receivedToken); // Use the corrected variable
 
                     notify("Login successful", 1);
-                    router.push(`/admin?token=${res.data.token}`); 
+                    router.push(`/admin?token=${receivedToken}`); // Use the corrected variable
                 } else {
                     notify(res.data.msg || "Login failed", 0);
                 }
