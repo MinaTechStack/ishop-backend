@@ -1,69 +1,71 @@
 // frontend/middleware.js
 
-import { NextResponse } from 'next/server'; // Import NextResponse
+import { NextResponse } from 'next/server';
 
-export async function middleware(req) { // Make the function async
-  const { pathname } = req.nextUrl; // Get the pathname from the request URL
+export async function middleware(req) {
+  const { pathname } = req.nextUrl;
 
-  // Protect routes starting with /admin
   if (pathname.startsWith('/admin')) {
-    // Get the admin_token cookie value from the incoming request
     const admin_token = req.cookies.get('admin_token')?.value;
 
-    // Log for debugging: Check what the middleware sees
-    console.log('Middleware checking admin_token:', admin_token);
+    // --- CRUCIAL CHANGE FOR DEBUGGING ---
+    // We are temporarily removing the immediate redirect here.
+    // This allows the code to proceed to the 'try...catch' block
+    // and attempt the fetch to the backend, even if admin_token is undefined
+    // from req.cookies. This will give us valuable logs from the fetch.
+    console.log('Middleware initial admin_token check (from req.cookies):', admin_token);
+    // if (!admin_token) {
+    //   console.log('Middleware: No admin_token found, redirecting to /admin-login.');
+    //   return NextResponse.redirect(new URL('/admin-login', req.url));
+    // }
+    // --- END CRUCIAL CHANGE ---
 
-    // If no token is found, redirect immediately to the login page
-    if (!admin_token) {
-      console.log('Middleware: No admin_token found, redirecting to /admin-login.');
-      return NextResponse.redirect(new URL('/admin-login', req.url));
-    }
-
-    // If a token is present, attempt to verify it with the backend
     try {
-      // Construct the full backend verification URL using NEXT_PUBLIC_API_BASE_URL
-      // This is Option B: matching the env variable name from your .env file
       const backendVerifyUrl = process.env.NEXT_PUBLIC_API_BASE_URL + '/admin/verify-token';
 
-      // Make an internal server-to-server fetch request to your backend.
-      // Crucially, forward the admin_token in the 'Cookie' header,
-      // as the backend's `authorize` middleware expects it there.
+      // --- ADDED LOGS FOR DEBUGGING THE FETCH ---
+      console.log('Middleware: Attempting to fetch backend verification endpoint:', backendVerifyUrl);
+
+      const fetchHeaders = {
+        // IMPORTANT: Manually set the Cookie header.
+        // Even if admin_token is undefined here, we send 'admin_token=' to the backend.
+        // Your backend's 'authorize' middleware should then correctly handle this as a missing token.
+        'Cookie': `admin_token=${admin_token || ''}` // Use empty string if undefined to prevent 'undefined' in header
+      };
+      console.log('Middleware: Fetching with headers:', fetchHeaders);
+      // --- END ADDED LOGS ---
+
       const response = await fetch(backendVerifyUrl, {
-        method: 'GET', // Or 'POST' if your backend verify endpoint expects POST
-        headers: {
-          // Send the cookie received by the middleware to the backend
-          'Cookie': `admin_token=${admin_token}`
-        }
+        method: 'GET',
+        headers: fetchHeaders
       });
 
-      // Log the backend verification response status for debugging
       console.log(`Middleware: Backend verification response status: ${response.status}`);
 
       if (response.ok) { // Check if the response status is 2xx (e.g., 200 OK)
-        // If the backend responds with a success status, the token is valid.
         console.log('Middleware: Token successfully verified by backend. Allowing access.');
-        return NextResponse.next(); // Allow the request to proceed to the /admin route
+        return NextResponse.next();
       } else {
-        // If the backend indicates the token is invalid (e.g., 401, 403 status)
-        console.log('Middleware: Backend token verification failed. Redirecting to /admin-login.');
+        console.log('Middleware: Backend token verification failed or returned non-OK status. Redirecting to /admin-login.');
+        try {
+            const errorBody = await response.json();
+            console.log('Middleware: Backend error response body:', errorBody);
+        } catch (jsonError) {
+            console.log('Middleware: Could not parse backend error response as JSON.');
+        }
+
         const redirectResponse = NextResponse.redirect(new URL('/admin-login', req.url));
-        // Optional: If the token was invalid, explicitly tell the browser to delete it.
-        // This sets a Set-Cookie header with an expired date to remove the cookie.
         redirectResponse.cookies.delete('admin_token');
-        return redirectResponse; // Redirect to login page
+        return redirectResponse;
       }
     } catch (error) {
-      // Handle network errors (e.g., backend is unreachable, DNS issues)
-      console.error('Middleware: Error during backend token verification:', error);
-      // Redirect to login page on any error during verification
+      console.error('Middleware: Error during backend token verification fetch:', error);
       return NextResponse.redirect(new URL('/admin-login', req.url));
     }
   }
-  // For all other paths that don't start with /admin, allow the request to proceed
   return NextResponse.next();
 }
 
-// Define the matcher to apply this middleware only to paths under /admin
 export const config = {
   matcher: '/admin/:path*',
 };
