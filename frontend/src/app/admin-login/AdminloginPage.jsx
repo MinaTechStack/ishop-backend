@@ -1,3 +1,5 @@
+// frontend/app/admin-login/AdminLogin.js
+
 'use client';
 import React, { useEffect } from 'react';
 import { axiosApiInstance, notify } from '../library/helper';
@@ -11,9 +13,12 @@ export default function AdminLogin() {
         const adminData = localStorage.getItem("admin");
 
         if (adminData) {
+            // If adminData exists, and we are on /admin-login, redirect to /admin
+            // This redirect in useEffect handles cases where the user might directly type
+            // /admin-login while already logged in. The middleware will also handle this.
             router.replace('/admin');
         }
-    }, [router, searchParams]);
+    }, [router, searchParams]); // searchParams dependency added for completeness, though not strictly used here for initial redirect
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -24,19 +29,27 @@ export default function AdminLogin() {
 
         axiosApiInstance.post("admin/login", data, { withCredentials: true }).then(
             (res) => {
-                console.log(res)
+                console.log("Login API Response:", res); // Debug log
                 if (res.data.flag === 1) {
                     localStorage.setItem("admin", JSON.stringify(res.data.admin));
                     localStorage.setItem("loginAt", new Date());
-                    notify("Login successful", 1)
-                    router.push("/admin")
+                    // --- NEW CRUCIAL LINE ---
+                    // Store the raw admin token string in localStorage as a fallback.
+                    // This is accessible by client-side JS but is a workaround for middleware issues.
+                    localStorage.setItem("admin_token_fallback", res.data.token);
+
+                    notify("Login successful", 1);
+                    // --- NEW CRUCIAL LINE ---
+                    // Redirect to /admin, passing the token as a query parameter.
+                    // The middleware will attempt to read this if req.cookies doesn't work.
+                    router.push(`/admin?token=${res.data.token}`);
                 } else {
                     notify(res.data.msg || "Login failed", 0);
                 }
             }
         ).catch(
             (err) => {
-                console.log(err);
+                console.log("Login API Error:", err);
                 notify("Server error", 0);
             }
         )
