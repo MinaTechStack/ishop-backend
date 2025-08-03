@@ -18,7 +18,7 @@ server.use(express.static("public"));
 server.use(express.json());
 server.use(cookieParser());
 server.use(cors({
-    origin: "https://ishop-backend-nu.vercel.app",
+    origin: "https://ishop-frontend-90uz.onrender.com/",
     credentials: true,
     allowedHeaders: ["Content-Type"], // removed "Authorization"
     methods: ["GET", "POST", "PUT", "DELETE"],
@@ -32,12 +32,14 @@ server.use("/user", UserRouter);
 server.use("/cart", CartRouter);
 server.use("/order", OrderRouter);
 
+const PORT = process.env.PORT || 5000;
+
 // ✅ MongoDB Atlas Connection
 mongoose.connect(process.env.MONGO_URI, {
 })
     .then(() => {
-        server.listen(5000, () => {
-            console.log("Server is running on http://localhost:5000");
+        server.listen(PORT, () => {
+            console.log("`Server is running on port ${PORT}`");
         });
         console.log('MongoDB Atlas connected successfully');
     })
