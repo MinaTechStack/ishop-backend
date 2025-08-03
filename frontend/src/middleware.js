@@ -6,29 +6,29 @@ export async function middleware(req) {
   const { pathname } = req.nextUrl;
 
   if (pathname.startsWith('/admin')) {
-    let admin_token_from_middleware = null; // Use a distinct variable name
+    let finalToken = null; // Use a distinct, clear variable name
 
-    // 1. Attempt to get token from req.cookies
+    // Attempt to get token from req.cookies first
     const cookieToken = req.cookies.get('admin_token')?.value;
+    console.log('Middleware DEBUG: Cookie token found:', cookieToken); // LOG THIS
     if (cookieToken) {
-      admin_token_from_middleware = cookieToken;
-      console.log('Middleware DEBUG: admin_token found in req.cookies.');
+      finalToken = cookieToken;
     }
 
-    // 2. If not found in cookies, attempt to get token from URL search params
-    if (!admin_token_from_middleware) { // Only try search params if cookie was not found
+    // If no token from cookie, attempt to get token from URL search params
+    if (!finalToken) {
       const paramToken = req.nextUrl.searchParams.get('token');
+      console.log('Middleware DEBUG: URL param token found:', paramToken); // LOG THIS
       if (paramToken) {
-        admin_token_from_middleware = paramToken;
-        console.log('Middleware DEBUG: admin_token found in URL search params (fallback).');
+        finalToken = paramToken;
       }
     }
 
     // --- FINAL VERIFICATION LOG ---
-    console.log('Middleware DEBUG: Final token to verify:', admin_token_from_middleware);
+    console.log('Middleware DEBUG: Final token to verify:', finalToken);
 
-    // If no token is found from either source, redirect to login page.
-    if (!admin_token_from_middleware) {
+    // If no token (from either source) is found, redirect to login page.
+    if (!finalToken) {
       console.log('Middleware DEBUG: No valid admin_token found. Redirecting to /admin-login.');
       return NextResponse.redirect(new URL('/admin-login', req.url));
     }
@@ -39,8 +39,7 @@ export async function middleware(req) {
       console.log('Middleware DEBUG: Attempting to fetch backend verification endpoint:', backendVerifyUrl);
 
       const fetchHeaders = {
-        // Use the distinct variable here
-        'Cookie': `admin_token=${admin_token_from_middleware}`
+        'Cookie': `admin_token=${finalToken}` // Use the distinct variable here
       };
       console.log('Middleware DEBUG: Fetching with headers:', fetchHeaders);
 
