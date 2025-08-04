@@ -1,6 +1,7 @@
 const express = require("express");
 const OrderRouter = express.Router();
-const OrderController = require("../controllers/orderController")
+const OrderController = require("../controllers/orderController");
+const authorize = require("../middleware/authorozation");
 
 
 OrderRouter.post('/order-place', OrderController.orderPlace);
