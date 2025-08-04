@@ -21,7 +21,7 @@ server.use(cookieParser());
 server.use(cors({
     origin: "https://ishop-backend-nu.vercel.app",
     credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization"], // removed "Authorization"
+    allowedHeaders: ["Content-Type", "Authorization"],  
     methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
     optionsSuccessStatus: 204
 }));
