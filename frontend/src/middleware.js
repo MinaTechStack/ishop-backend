@@ -40,7 +40,7 @@ export async function middleware(request) {
                 // This allows your backend 'authorize' middleware to find it.
                 'Authorization': `Bearer ${tokenToVerify}` // <--- MODIFIED HEADER
             },
-            // Do NOT use withCredentials here; it's a server-to-server fetch, not browser-to-server.
+   
         });
 
         if (response.ok) {
