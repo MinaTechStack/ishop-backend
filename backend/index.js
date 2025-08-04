@@ -10,28 +10,25 @@ const AdminRouter = require('./routers/adminRouter');
 const UserRouter = require('./routers/userRouter');
 const CartRouter = require('./routers/cartRouter');
 const OrderRouter = require('./routers/orderRouter');
-const authorize = require('./middleware/authorozation');
 
 const server = express();
 server.use(express.static("public"));
 
-// Middleware
 server.use(express.json());
 server.use(cookieParser());
 server.use(cors({
     origin: "https://ishop-backend-nu.vercel.app",
     credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization"],  
-    methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
-    optionsSuccessStatus: 204
+    allowedHeaders: ["Content-Type"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
 }));
 
-server.use("/category", authorize, CategoryRouter);
-server.use("/color", authorize, colorRouter);
-server.use("/product", authorize, ProductRouter);
+server.use("/category", CategoryRouter);
+server.use("/color", colorRouter);
+server.use("/product", ProductRouter);
 server.use("/admin", AdminRouter);
 server.use("/user", UserRouter);
-server.use("/cart", authorize, CartRouter);
+server.use("/cart", CartRouter);
 server.use("/order", OrderRouter);
 
 // ✅ MongoDB Atlas Connection
