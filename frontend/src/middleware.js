@@ -1,4 +1,4 @@
-// frontend/src/middleware.js
+// frontend/middleware.js
 import { NextResponse } from 'next/server';
 
 export async function middleware(request) {
@@ -18,7 +18,10 @@ export async function middleware(request) {
 
     if (!adminTokenCookie) {
         console.log("Middleware DEBUG: No 'admin_token' cookie found. Redirecting to /admin-login.");
-        return NextResponse.redirect(new URL('/admin-login', request.url));
+        // Log response headers to see what Vercel sends back
+        const response = NextResponse.redirect(new URL('/admin-login', request.url));
+        response.headers.set('X-Middleware-Redirect', 'No token found');
+        return response;
     }
 
     // If cookie is found, verify it with the backend
@@ -26,13 +29,11 @@ export async function middleware(request) {
         console.log("Middleware DEBUG: Attempting to fetch backend verification endpoint.");
         const backendVerifyUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/verify-token`;
 
-        // When making a server-to-server fetch, you manually construct the 'Cookie' header
         const response = await fetch(backendVerifyUrl, {
             method: 'GET',
             headers: {
-                'Cookie': `admin_token=${adminTokenCookie.value}`
+                'Cookie': `admin_token=${adminTokenCookie.value}` // Send the backend cookie
             },
-            // Do NOT use withCredentials here; it's a server-to-server fetch, not browser-to-server.
         });
 
         if (response.ok) {
@@ -46,11 +47,16 @@ export async function middleware(request) {
         console.log(`Middleware DEBUG: Backend token verification failed (Status: ${response.status}). Redirecting.`);
         const errorBody = await response.text();
         console.log("Middleware DEBUG: Backend error response body:", errorBody);
-        return NextResponse.redirect(new URL('/admin-login', request.url));
+        // Log response headers for redirect
+        const redirectResponse = NextResponse.redirect(new URL('/admin-login', request.url));
+        redirectResponse.headers.set('X-Middleware-Redirect', `Verification failed: ${response.status}`);
+        return redirectResponse;
 
     } catch (error) {
         console.error("Middleware verification error:", error);
-        return NextResponse.redirect(new URL('/admin-login', request.url));
+        const redirectResponse = NextResponse.redirect(new URL('/admin-login', request.url));
+        redirectResponse.headers.set('X-Middleware-Redirect', `Verification error: ${error.message}`);
+        return redirectResponse;
     }
 }
 
