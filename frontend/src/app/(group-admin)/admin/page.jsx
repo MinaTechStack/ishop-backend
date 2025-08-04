@@ -81,7 +81,7 @@ const Dashboard = () => {
         // or configure it here to use the token from localStorage.
         // If your backend /order/all endpoint also requires authentication,
         // you should include the Authorization header for this request as well.
-        const token = ""
+        const token = request.cookies.get('admin_token')?.value;
         // localStorage.getItem('admin_token_fallback'); // Get token again for this request
 
         const res = await axiosApiInstance.get("/order/all", {
