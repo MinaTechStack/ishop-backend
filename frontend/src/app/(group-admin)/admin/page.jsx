@@ -30,50 +30,50 @@ const Dashboard = () => {
   const router = useRouter();
 
   useEffect(() => {
-    async function checkAuthAndFetchData() {
-      const token = localStorage.getItem('admin_token_fallback');
-      if (!token) {
-        console.log("Client-side Dashboard: No token in localStorage. Redirecting.");
-        router.replace('/admin-login');
-        setLoadingAuth(false); // Stop loading if no token
-        return;
-      }
+    // async function checkAuthAndFetchData() {
+    //   const token = localStorage.getItem('admin_token_fallback');
+    //   if (!token) {
+    //     console.log("Client-side Dashboard: No token in localStorage. Redirecting.");
+    //     router.replace('/admin-login');
+    //     setLoadingAuth(false); // Stop loading if no token
+    //     return;
+    //   }
 
-      try {
-        // DIRECTLY CALL YOUR BACKEND'S VERIFY ENDPOINT
-        const backendVerifyUrl = process.env.NEXT_PUBLIC_API_BASE_URL + '/admin/verify-token'; 
-        console.log(`Client-side Dashboard: Calling backend verify endpoint: ${backendVerifyUrl}`);
+    //   try {
+    //     // DIRECTLY CALL YOUR BACKEND'S VERIFY ENDPOINT
+    //     const backendVerifyUrl = process.env.NEXT_PUBLIC_API_BASE_URL + '/admin/verify-token'; 
+    //     console.log(`Client-side Dashboard: Calling backend verify endpoint: ${backendVerifyUrl}`);
 
-        const authResponse = await fetch(backendVerifyUrl, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`, // Send token from localStorage
-            'Content-Type': 'application/json'
-          },
-        });
+    //     const authResponse = await fetch(backendVerifyUrl, {
+    //       method: 'GET',
+    //       headers: {
+    //         'Authorization': `Bearer ${token}`, // Send token from localStorage
+    //         'Content-Type': 'application/json'
+    //       },
+    //     });
 
-        if (authResponse.ok) {
-          console.log("Client-side Dashboard: Token verified by backend.");
-          setIsAuthenticated(true);
-          // Only fetch dashboard data if authenticated
-          await fetchOrders(); 
-        } else {
-          console.log("Client-side Dashboard: Backend verification failed. Clearing localStorage and redirecting.");
-          localStorage.removeItem('admin_token_fallback'); 
-          localStorage.removeItem('admin');
-          localStorage.removeItem('loginAt');
-          router.replace('/admin-login');
-        }
-      } catch (error) {
-        console.error('Client-side Dashboard: Error during token verification fetch:', error);
-        localStorage.removeItem('admin_token_fallback');
-        localStorage.removeItem('admin');
-        localStorage.removeItem('loginAt');
-        router.replace('/admin-login');
-      } finally {
-        setLoadingAuth(false); // Authentication check finished
-      }
-    }
+    //     if (authResponse.ok) {
+    //       console.log("Client-side Dashboard: Token verified by backend.");
+    //       setIsAuthenticated(true);
+    //       // Only fetch dashboard data if authenticated
+    //       await fetchOrders(); 
+    //     } else {
+    //       console.log("Client-side Dashboard: Backend verification failed. Clearing localStorage and redirecting.");
+    //       localStorage.removeItem('admin_token_fallback'); 
+    //       localStorage.removeItem('admin');
+    //       localStorage.removeItem('loginAt');
+    //       router.replace('/admin-login');
+    //     }
+    //   } catch (error) {
+    //     console.error('Client-side Dashboard: Error during token verification fetch:', error);
+    //     localStorage.removeItem('admin_token_fallback');
+    //     localStorage.removeItem('admin');
+    //     localStorage.removeItem('loginAt');
+    //     router.replace('/admin-login');
+    //   } finally {
+    //     setLoadingAuth(false); // Authentication check finished
+    //   }
+    // }
 
     const fetchOrders = async () => {
       try {
@@ -81,12 +81,13 @@ const Dashboard = () => {
         // or configure it here to use the token from localStorage.
         // If your backend /order/all endpoint also requires authentication,
         // you should include the Authorization header for this request as well.
-        const token = localStorage.getItem('admin_token_fallback'); // Get token again for this request
+        const token = ""
+        // localStorage.getItem('admin_token_fallback'); // Get token again for this request
 
         const res = await axiosApiInstance.get("/order/all", {
-            headers: {
-                Authorization: `Bearer ${token}` // Add this header
-            }
+          headers: {
+            Authorization: `Bearer ${token}` // Add this header
+          }
         });
 
         const fetchedOrders = res.data.orders;
@@ -124,12 +125,12 @@ const Dashboard = () => {
         console.error("Failed to fetch orders", error);
         // Handle error: if orders fetch fails, consider redirecting or showing an error
         if (error.response && (error.response.status === 401 || error.response.status === 403)) {
-            // Token likely expired or invalid for data fetching too
-            console.log("Client-side Dashboard: Order fetch failed due to authentication. Redirecting.");
-            localStorage.removeItem('admin_token_fallback');
-            localStorage.removeItem('admin');
-            localStorage.removeItem('loginAt');
-            router.replace('/admin-login');
+          // Token likely expired or invalid for data fetching too
+          console.log("Client-side Dashboard: Order fetch failed due to authentication. Redirecting.");
+          localStorage.removeItem('admin_token_fallback');
+          localStorage.removeItem('admin');
+          localStorage.removeItem('loginAt');
+          router.replace('/admin-login');
         }
       }
     };
