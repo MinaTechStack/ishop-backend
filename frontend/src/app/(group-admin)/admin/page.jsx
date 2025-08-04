@@ -24,7 +24,7 @@ const Dashboard = () => {
   const [salesData, setSalesData] = useState([]);
   const [paymentData, setPaymentData] = useState([]);
   const [totalRevenue, setTotalRevenue] = useState(0);
-  const [loadingAuth, setLoadingAuth] = useState(true); // New state for authentication loading
+  const [loadingAuth, setLoadingAuth] = useState(true);  
   const [isAuthenticated, setIsAuthenticated] = useState(false); // New state for authentication status
 
   const router = useRouter();
