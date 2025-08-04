@@ -97,7 +97,7 @@ const Dashboard = () => {
         const total = fetchedOrders.reduce((acc, order) => acc + order.order_total, 0);
         setTotalRevenue(total);
 
-        // Monthly Sales Overview
+        
         const groupedSales = {};
         fetchedOrders.forEach(order => {
           const date = new Date(order.createdAt);
