@@ -14,7 +14,7 @@ const adminController = {
 
       const isMatch = await bcrypt.compare(password, admin.password);
       if (isMatch) {
-        const token = jwt.sign({ admin_id: admin._id }, process.env.SECRET_KEY, { expiresIn: "8h" });
+        const token = jwt.sign({ admin_id: admin._id }, process.env.SECRET_KEY, { expiresIn: "1h" });
         res.cookie('admin_token', token, {
           httpOnly: true,
           secure: true,
