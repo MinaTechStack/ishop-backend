@@ -13,7 +13,7 @@ export default function AdminLogin() {
     useEffect(() => {
         const adminData = localStorage.getItem("admin");
         if (adminData) {
-            router.replace('/admin'); // Redirect if already logged in via localStorage
+            router.replace('/admin'); 
         }
     }, [router]);
 
