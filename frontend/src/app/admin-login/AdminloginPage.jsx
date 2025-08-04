@@ -34,7 +34,7 @@ export default function AdminLogin() {
                 console.log("Client-side: Token received from backend:", receivedToken); 
 
                 if (receivedToken && typeof receivedToken === 'string') {
-                    localStorage.setItem("admin_token_fallback", receivedToken); 
+                    // localStorage.setItem("admin_token_fallback", receivedToken); 
                     notify("Login successful", 1);
                     router.push('/admin'); 
                 } else {
