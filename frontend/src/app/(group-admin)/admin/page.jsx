@@ -135,7 +135,7 @@ const Dashboard = () => {
       }
     };
 
-    checkAuthAndFetchData(); // Start the combined auth and data fetch process
+    // checkAuthAndFetchData(); // Start the combined auth and data fetch process
   }, [router]); // Depend on router to ensure effect runs if router changes (though unlikely here)
 
   const COLORS = ["#0088FE", "#FF8042"];
