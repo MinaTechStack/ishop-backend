@@ -2,8 +2,10 @@
 
 'use client';
 import React, { useEffect } from 'react';
+// Make sure this path is correct for your helper.js
 import { axiosApiInstance, notify } from '../library/helper';
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie'; // Import js-cookie
 
 export default function AdminLogin() {
     const router = useRouter();
@@ -23,20 +25,29 @@ export default function AdminLogin() {
         }
 
         try {
-            const res = await axiosApiInstance.post("admin/login", data, { withCredentials: true });
-            console.log("Login API Response from AdminLogin.js:", res); 
+            // Your axiosApiInstance should be configured to send credentials (HttpOnly cookie)
+            const res = await axiosApiInstance.post("/admin/login", data, { withCredentials: true });
+            console.log("Login API Response from AdminLogin.js:", res); //
 
             if (res.data.flag === 1) {
                 localStorage.setItem("admin", JSON.stringify(res.data.admin));
                 localStorage.setItem("loginAt", new Date());
 
                 const receivedToken = res.data.admin.token;
-                console.log("Client-side: Token received from backend:", receivedToken); 
+                console.log("Client-side: Token received from backend:", receivedToken);
 
                 if (receivedToken && typeof receivedToken === 'string') {
-                    // localStorage.setItem("admin_token_fallback", receivedToken); 
+                    // --- CRUCIAL ADDITION: Set a client-side readable cookie for middleware ---
+                    Cookies.set('admin_token_fallback_for_middleware', receivedToken, {
+                        expires: 1/24, // Or match your token's expiry (e.g., 1 hour for '1h')
+                        secure: true, // MUST be true for HTTPS (Vercel uses HTTPS)
+                        sameSite: 'None', // Important for cross-site cookie
+                        path: '/' // Make sure cookie is available across the entire site
+                    });
+                    // ----------------------------------------------------------------------
+
                     notify("Login successful", 1);
-                    router.push('/admin'); 
+                    router.push('/admin');
                 } else {
                     console.error("Client-side: Token is not a valid string or is missing:", receivedToken);
                     notify("Login failed: Invalid token received", 0);
