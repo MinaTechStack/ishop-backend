@@ -36,15 +36,7 @@ const getColor = async (id = null) => {
         )
 };
 
-const getProduct = async (
-    id = null,
-    category_slug = null,
-    color = null,
-    limit = 0,
-    minPrice = null,
-    maxPrice = null,
-    slug = null
-) => {
+const getProduct = async (id = null, category_slug = null, color = null, limit = 0, minPrice = null, maxPrice = null, slug = null) => {
     let API = "product";
     if (id != null) {
         API = `${API}/${id}`;
@@ -57,21 +49,11 @@ const getProduct = async (
     if (limit) query.append("limit", limit);
     if (minPrice !== null) query.append("minPrice", minPrice);
     if (maxPrice !== null) query.append("maxPrice", maxPrice);
-    if (slug) query.append("slug", slug);
+    if (slug) query.append("slug", slug); // ✅ support for slug
 
-    // Add timestamp to prevent browser cache
-    query.append("ts", Date.now());
-
-    return axiosApiInstance
-        .get(`${API}?${query.toString()}`, {
-            headers: {
-                "Cache-Control": "no-cache",
-                Pragma: "no-cache",
-            },
-        })
+    return axiosApiInstance.get(API + `?${query.toString()}`)
         .then((response) => response.data)
         .catch(() => null);
 };
-
 
 export { getCategory, getColor, getProduct };
