@@ -6,6 +6,7 @@ import { axiosApiInstance, createSlug, notify } from "@/app/library/helper";
 import { getCategory, getColor } from "@/app/library/api-call";
 import Select from 'react-select'
 import RichTextEditor from "@/components/admin/RichTextEditor";
+import { useRouter } from "next/router";
 
 
 
@@ -43,6 +44,7 @@ const AddProductForm = () => {
 
         const final = Math.floor(op - op * (dp / 100));
         finalPriceRef.current.value = final;
+        const router = useRouter;
     }
 
 
@@ -70,7 +72,8 @@ const AddProductForm = () => {
                 notify(response.data.msg, response.data.flag)
                 if (response.data.flag === 1) {
                     e.target.reset();
-                    setDescription("")
+                    setDescription("");
+                     router.refresh();
                 }
 
             }
