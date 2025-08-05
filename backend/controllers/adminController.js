@@ -16,7 +16,7 @@ const adminController = {
       if (isMatch) {
         const token = jwt.sign({ admin_id: admin._id }, process.env.SECRET_KEY, { expiresIn: "1h" });
         res.cookie('admin_token', token, {
-          httpOnly: true
+          httpOnly: true,
           secure: true,
           maxAge: 24 * 60 * 60 * 1000,
           sameSite: 'None',
