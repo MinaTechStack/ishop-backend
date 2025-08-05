@@ -25,21 +25,23 @@ const getColor = async (id = null) => {
         API = `${API}/${id}`;
     }
 
-    return axiosApiInstance.get(API, {
-        headers: {
-            'Cache-Control': 'no-store' // Add this header
+    // Construct the full URL for the API call using your environment variable
+    const fullUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/${API}`;
+
+    try {
+        const response = await fetch(fullUrl, {
+            cache: 'no-store' // This is the key to bypass the Next.js cache
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch color data');
         }
-    })
-        .then(
-            (response) => {
-                return response.data;
-            }
-        )
-        .catch(
-            (error) => {
-                return null;
-            }
-        );
+
+        return response.json();
+    } catch (error) {
+        console.error("Error fetching colors:", error);
+        return null;
+    }
 };
 
 const getProduct = async (id = null, category_slug = null, color = null, limit = 0, minPrice = null, maxPrice = null, slug = null) => {
