@@ -1,39 +1,28 @@
-// frontend/app/admin-login/AdminLogin.js
-
 'use client';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { axiosApiInstance, notify } from '../library/helper';
-import { useRouter } from 'next/navigation';
+// useRouter is no longer needed since we're using a full page reload
+// import { useRouter } from 'next/navigation';
 
 export default function AdminLogin() {
-    const router = useRouter();
-
-    useEffect(() => {
-        const adminData = localStorage.getItem("admin");
-        if (adminData) {
-            router.replace('/admin'); // Redirect if already logged in via localStorage
-        }
-    }, [router]);
+    // The useEffect hook and router are removed as they are no longer necessary.
+    // The middleware now handles all redirection.
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const data = {
             email: e.target.email.value,
             password: e.target.password.value
-        }
+        };
 
         try {
+            // withCredentials is crucial for sending the httpOnly cookie
             const res = await axiosApiInstance.post("admin/login", data, { withCredentials: true });
-            console.log("Login API Response from AdminLogin.js:", res);
-
+            
             if (res.data.flag === 1) {
-                
-                    notify("Login successful", 1);
-                    window.location.href = '/admin';
-                } else {
-                    console.error("Client-side: Token is not a valid string or is missing:", receivedToken);
-                    notify("Login failed: Invalid token received", 0);
-                }
+                notify("Login successful", 1);
+                // Use a full page reload to let the middleware handle authentication
+                window.location.href = '/admin';
             } else {
                 notify(res.data.msg || "Login failed", 0);
             }
@@ -44,7 +33,6 @@ export default function AdminLogin() {
     };
 
     return (
-        // ... (rest of your component remains the same)
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
             <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
                 <h2 className="text-2xl font-bold text-center text-gray-800">Admin Login</h2>
