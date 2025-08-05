@@ -27,14 +27,7 @@ export default function AdminLogin() {
             console.log("Login API Response from AdminLogin.js:", res);
 
             if (res.data.flag === 1) {
-                localStorage.setItem("admin", JSON.stringify(res.data.admin));
-                localStorage.setItem("loginAt", new Date());
-
-                const receivedToken = res.data.admin.token;
-                console.log("Client-side: Token received from backend:", receivedToken);
-
-                if (receivedToken && typeof receivedToken === 'string') {
-                    localStorage.setItem("admin_token_fallback", receivedToken);
+                
                     notify("Login successful", 1);
                     window.location.href = '/admin';
                 } else {
