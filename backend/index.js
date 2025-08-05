@@ -12,15 +12,15 @@ const CartRouter = require('./routers/cartRouter');
 const OrderRouter = require('./routers/orderRouter');
 
 const server = express();
-server.use(express.static("public"));
+server.use('/images', express.static('public/images'));
 
 server.use(express.json());
 server.use(cookieParser());
 server.use(cors({
     origin: "https://ishop-backend-nu.vercel.app",
     credentials: true,
-    allowedHeaders: ["Content-Type","Authorization","Cache-Control"],
-    methods: ["GET", "POST", "PUT", "DELETE","PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "Cache-Control"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
 }));
 
 server.use("/category", CategoryRouter);
