@@ -64,7 +64,6 @@ export default function AdminLogin() {
                             type="email"
                             id="email"
                             name='email'
-                            value='m@gmail.com'
                             required
                             className="w-full px-4 py-2 mt-1 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             placeholder="Enter your email"
@@ -78,7 +77,6 @@ export default function AdminLogin() {
                             type="password"
                             id="password"
                             name="password"
-                            value='1234567'
                             required
                             className="w-full px-4 py-2 mt-1 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             placeholder="Enter your password"
