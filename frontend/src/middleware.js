@@ -2,24 +2,22 @@
 import { NextResponse } from 'next/server';
 
 export async function middleware(request) {
-  const path = request.nextUrl.pathname;
-  let token = request.cookies.get('admin_token')?.value;
+  const path = request.nextUrl.pathname;
 
-  if (path.startsWith('/admin')) {
-    if (!token) {
-      return NextResponse.redirect(new URL('/admin-login', request.url));
-    }
-    return NextResponse.next();
-  }
+  // Allow access to login page and static assets
+  if (path === '/admin-login' || path.startsWith('/_next/static') || path.startsWith('/_next/image')) {
+    return NextResponse.next();
+  }
 
-  if (path === '/admin-login') {
-    if (token) {
-      return NextResponse.redirect(new URL('/admin', request.url));
-    }
-  }
-  return NextResponse.next();
+  // 1. Attempt to get the httpOnly cookie set by the backend directly
+  let token = request.cookies.get('admin_token')?.value;
+  if (token) {
+    request.token = token; // Attach token to request for further processing
+    return NextResponse.next();
+  }
+
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/admin-login'],
+  matcher: '/admin/:path*',
 };
