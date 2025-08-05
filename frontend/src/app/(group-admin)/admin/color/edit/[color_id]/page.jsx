@@ -127,7 +127,7 @@ const EditColorForm = ({ params }) => {
                     <div className="text-center">
                         <button
                             type="submit"
-                            className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition transform hover:scale-[1.01]"
+                            className="bg-blue-600 cursor-pointer text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition transform hover:scale-[1.01]"
                         >
                             Edit Color
                         </button>

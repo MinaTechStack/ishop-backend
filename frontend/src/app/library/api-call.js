@@ -1,22 +1,26 @@
 import { axiosApiInstance } from "./helper";
 
-const { default: axios } = require("axios")
-
 const getCategory = async (id = null) => {
     let API = "category";
     if (id != null) {
         API = `${API}/${id}`;
     }
-    return axiosApiInstance.get(API).then(
-        (response) => {
-            return response.data
+    const fullUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/${API}`;
+
+    try {
+        const response = await fetch(fullUrl, {
+            cache: 'no-store'
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch category data');
         }
-    )
-        .catch(
-            (error) => {
-                return null
-            }
-        )
+
+        return response.json();
+    } catch (error) {
+        console.error("Error fetching categories:", error);
+        return null;
+    }
 };
 
 const getColor = async (id = null) => {
@@ -25,12 +29,11 @@ const getColor = async (id = null) => {
         API = `${API}/${id}`;
     }
 
-    // Construct the full URL for the API call using your environment variable
     const fullUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/${API}`;
 
     try {
         const response = await fetch(fullUrl, {
-            cache: 'no-store' // This is the key to bypass the Next.js cache
+            cache: 'no-store'
         });
 
         if (!response.ok) {
@@ -57,11 +60,24 @@ const getProduct = async (id = null, category_slug = null, color = null, limit =
     if (limit) query.append("limit", limit);
     if (minPrice !== null) query.append("minPrice", minPrice);
     if (maxPrice !== null) query.append("maxPrice", maxPrice);
-    if (slug) query.append("slug", slug); // ✅ support for slug
+    if (slug) query.append("slug", slug);
 
-    return axiosApiInstance.get(API + `?${query.toString()}`)
-        .then((response) => response.data)
-        .catch(() => null);
+    const fullUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/${API}?${query.toString()}`;
+
+    try {
+        const response = await fetch(fullUrl, {
+            cache: 'no-store'
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch product data');
+        }
+
+        return response.json();
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        return null;
+    }
 };
 
 export { getCategory, getColor, getProduct };
