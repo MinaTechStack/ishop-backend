@@ -1,29 +1,47 @@
+// frontend/middleware.js
+// import { NextResponse } from 'next/server';
+
+// export async function middleware(request) {
+//   const path = request.nextUrl.pathname;
+
+//   // Allow access to login page and static assets
+//   if (path === '/admin-login' || path.startsWith('/_next/static') || path.startsWith('/_next/image')) {
+//     return NextResponse.next();
+//   }
+
+//   // 1. Attempt to get the httpOnly cookie set by the backend directly
+//   let token = request.cookies.get('admin_token')?.value;
+//   if (token) {
+//     request.token = token; // Attach token to request for further processing
+//     return NextResponse.next();
+//   }
+
+// }
+
+// export const config = {
+//   matcher: '/admin/:path*',
+// };
+
+
 import { NextResponse } from 'next/server';
 
-export async function middleware(request) {
-    const path = request.nextUrl.pathname;
-    let token = request.cookies.get('admin_token')?.value;
+// Middleware to protect admin routes
+export function middleware(req) {
+  const { pathname } = req.nextUrl;
 
-    // Redirect a logged-in user away from the login page
-    if (path === '/admin-login' && token) {
-        return NextResponse.redirect(new URL('/admin', request.url));
+  // Protect routes starting with /admin
+  if (pathname.startsWith('/admin')) {
+    const admin_token = req.cookies.get('admin_token')?.value;
+
+    // Redirect to login if admin_id is missing
+    if (!admin_token) {
+      return NextResponse.redirect(new URL('/admin-login', req.url));
     }
-
-    // Protect all admin routes
-    if (path.startsWith('/admin')) {
-        // If there's no token, redirect to the login page
-        if (!token) {
-            return NextResponse.redirect(new URL('/admin-login', request.url));
-        }
-        // If a token exists, let the request proceed
-        return NextResponse.next();
-    }
-
-    // For all other routes, do nothing
-    return NextResponse.next();
+  }
+  return NextResponse.next();
 }
 
+// Apply middleware only to /admin routes
 export const config = {
-    // Match both admin routes and the login page
-    matcher: ['/admin/:path*', '/admin-login'],
+  matcher: '/admin/:path*',
 };
