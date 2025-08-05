@@ -24,16 +24,22 @@ const getColor = async (id = null) => {
     if (id != null) {
         API = `${API}/${id}`;
     }
-    return axiosApiInstance.get(API).then(
-        (response) => {
-            return response.data
+
+    return axiosApiInstance.get(API, {
+        headers: {
+            'Cache-Control': 'no-store' // Add this header
         }
-    )
-        .catch(
-            (error) => {
-                return null
+    })
+        .then(
+            (response) => {
+                return response.data;
             }
         )
+        .catch(
+            (error) => {
+                return null;
+            }
+        );
 };
 
 const getProduct = async (id = null, category_slug = null, color = null, limit = 0, minPrice = null, maxPrice = null, slug = null) => {
