@@ -12,7 +12,7 @@ const CartRouter = require('./routers/cartRouter');
 const OrderRouter = require('./routers/orderRouter');
 
 const server = express();
-server.use('/images', express.static('public/images'));
+server.use(express.static("public"));
 
 server.use(express.json());
 server.use(cookieParser());
