@@ -24,19 +24,19 @@ export default function AdminLogin() {
 
         try {
             const res = await axiosApiInstance.post("admin/login", data, { withCredentials: true });
-            console.log("Login API Response from AdminLogin.js:", res); 
+            console.log("Login API Response from AdminLogin.js:", res);
 
             if (res.data.flag === 1) {
                 localStorage.setItem("admin", JSON.stringify(res.data.admin));
                 localStorage.setItem("loginAt", new Date());
 
                 const receivedToken = res.data.admin.token;
-                console.log("Client-side: Token received from backend:", receivedToken); 
+                console.log("Client-side: Token received from backend:", receivedToken);
 
                 if (receivedToken && typeof receivedToken === 'string') {
-                    localStorage.setItem("admin_token_fallback", receivedToken); 
+                    localStorage.setItem("admin_token_fallback", receivedToken);
                     notify("Login successful", 1);
-                    router.push('/admin'); 
+                    window.location.href = '/admin';
                 } else {
                     console.error("Client-side: Token is not a valid string or is missing:", receivedToken);
                     notify("Login failed: Invalid token received", 0);
