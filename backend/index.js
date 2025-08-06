@@ -3,6 +3,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const path = require('path'); // ✅ Required for static path
+
 const CategoryRouter = require('./routers/categoryRouter');
 const colorRouter = require('./routers/colorRouter');
 const ProductRouter = require('./routers/productRouter');
@@ -12,8 +14,11 @@ const CartRouter = require('./routers/cartRouter');
 const OrderRouter = require('./routers/orderRouter');
 
 const server = express();
-server.use(express.static("public"));
 
+// ✅ Serve images from /images URL path
+server.use('/images', express.static(path.join(__dirname, 'public/images')));
+
+server.use(express.static("public"));
 server.use(express.json());
 server.use(cookieParser());
 server.use(cors({
@@ -32,8 +37,7 @@ server.use("/cart", CartRouter);
 server.use("/order", OrderRouter);
 
 // ✅ MongoDB Atlas Connection
-mongoose.connect(process.env.MONGO_URI, {
-})
+mongoose.connect(process.env.MONGO_URI, {})
     .then(() => {
         server.listen(5000, () => {
             console.log("Server is running on http://localhost:5000");
