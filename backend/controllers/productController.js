@@ -90,7 +90,6 @@ const productController = {
                     if (req.query.minPrice) priceFilter.$gte = parseFloat(req.query.minPrice);
                     if (req.query.maxPrice) priceFilter.$lte = parseFloat(req.query.maxPrice);
 
-                    // Make sure you’re filtering on correct field name (price or finalPrice)
                     filterQuery.finalPrice = priceFilter;
                 }
                 const limit = req.query.limit ? parseInt(req.query.limit) : 0;

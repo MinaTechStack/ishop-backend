@@ -40,13 +40,12 @@ const cartController = {
             const existingItem = await CartModel.findOne({ user_id: userId, product_id: productId });
 
             if (existingItem) {
-                // Increase quantity atomically
+                
                 await CartModel.updateOne(
                     { _id: existingItem._id },
                     { $inc: { qty: Number(qty) } }
                 );
             } else {
-                // Create new cart item and await saving
                 const newItem = new CartModel({
                     user_id: userId,
                     product_id: productId,
@@ -83,7 +82,6 @@ const cartController = {
                     item.qty -= 1;
                     await item.save();
                 } else {
-                    // If quantity is 1 and decrement is pressed, remove the item
                     await CartModel.deleteOne({ _id: item._id });
                     return res.status(200).json({ msg: "Item removed from cart", status: 1, removed: true });
                 }
