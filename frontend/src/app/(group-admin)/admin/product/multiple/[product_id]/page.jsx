@@ -35,7 +35,6 @@ const AddProductImage = ({ params }) => {
         <div className="flex justify-center mt-12 px-4">
             <div className="w-full max-w-4xl bg-white rounded-2xl shadow-lg p-8 space-y-8">
 
-                {/* Header */}
                 <div className="flex justify-between items-center">
                     <h2 className="text-3xl font-bold text-gray-800">Add New Products</h2>
                     <Link href="/admin/product">
@@ -46,9 +45,7 @@ const AddProductImage = ({ params }) => {
                     </Link>
                 </div>
 
-                {/* Form */}
                 <form onSubmit={submitHandler} className="space-y-6">
-                    {/* Images */}
                     <div className="space-y-4">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Upload Image</label>

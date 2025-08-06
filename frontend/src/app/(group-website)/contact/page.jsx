@@ -71,7 +71,6 @@ export default function ContactForm() {
               </button>
             </form>
 
-            {/* Contact Info */}
             <div className="md:col-span-2 w-full space-y-6">
               <div className="bg-gray-100 py-6 px-4 sm:px-6 rounded-lg space-y-5">
                 <div>
@@ -104,7 +103,6 @@ export default function ContactForm() {
         </div>
       </div>
 
-      {/* Google Map Section */}
       <div className="bg-white p-4 sm:p-6 md:p-8 rounded-md shadow-md my-10">
         <h2 className="text-base sm:text-lg font-semibold mb-4 text-center">FIND US ON GOOGLE MAP</h2>
         <div className="w-full aspect-video rounded-md overflow-hidden border-2 border-gray-200 shadow">

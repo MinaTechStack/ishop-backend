@@ -51,7 +51,6 @@ const EditCategoryForm = ({ params }) => {
 
     return (
         <div className="flex flex-col items-center mt-10 px-4 relative">
-            {/* Top-Right Back Button */}
             <div className="w-full max-w-2xl flex justify-end mb-4">
                 <Link href="/admin/category">
                     <button className="flex items-center gap-2 cursor-pointer bg-gray-100 text-blue-700 hover:bg-gray-200 px-4 py-2 rounded-lg font-medium shadow transition">
@@ -61,14 +60,12 @@ const EditCategoryForm = ({ params }) => {
                 </Link>
             </div>
 
-            {/* Form Card */}
             <div className="bg-white w-full max-w-2xl rounded-xl shadow-xl p-6 animate-scaleIn">
                 <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
                     Edit Category
                 </h2>
 
                 <form onSubmit={submitHandler} className="space-y-5">
-                    {/* Category Name */}
                     <div>
                         <label className="block mb-1 text-gray-700 font-medium">
                             Category Name
@@ -83,7 +80,6 @@ const EditCategoryForm = ({ params }) => {
                         />
                     </div>
 
-                    {/* Category Slug */}
                     <div>
                         <label className="block mb-1 text-gray-700 font-medium">
                             Category Slug
@@ -98,7 +94,6 @@ const EditCategoryForm = ({ params }) => {
                         />
                     </div>
 
-                    {/* Category Image */}
                     <div>
                         <label className="block mb-1 text-gray-700 font-medium">
                             Category Image
@@ -111,7 +106,7 @@ const EditCategoryForm = ({ params }) => {
                         />
                         {category?.categoryImage && (
                             <>
-                                {console.log(category?.categoryImage)} {/* Debug log */}
+                                {console.log(category?.categoryImage)} 
                                 <img
                                     src={`${process.env.NEXT_PUBLIC_API_BASE_URL}/images/category/${category.categoryImage}`}
                                     alt="Current category"
@@ -123,7 +118,6 @@ const EditCategoryForm = ({ params }) => {
 
                     </div>
 
-                    {/* Submit Button */}
                     <div className="text-center">
                         <button
                             type="submit"

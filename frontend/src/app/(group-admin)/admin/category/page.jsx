@@ -43,7 +43,6 @@ const CategoryPage = async () => {
                                 <tr key={cat._id} className="border-t border-gray-100 hover:bg-purple-50">
                                     <td className="px-6 py-4 text-sm text-gray-600">{index + 1}</td>
 
-                                    {/* Combined Image + Name */}
                                     <td className="px-6 py-4 text-sm text-gray-700">
                                         <div className="flex items-center gap-3">
                                             <img

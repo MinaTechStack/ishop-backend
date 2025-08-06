@@ -42,7 +42,6 @@ const ProductPage = async () => {
                   className="border-b group hover:bg-purple-50 hover:shadow-md transition-all duration-200 ease-in-out rounded-xl"
                 >
                   <td className="py-4 px-6 font-medium text-gray-800 group-hover:text-purple-700 transition-colors duration-200">
-                    {index + 1} {/* Serial Number */}
                   </td>
 
                   <td className="py-4 px-6 font-medium text-gray-800 group-hover:text-purple-700 transition-colors duration-200">

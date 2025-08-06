@@ -56,7 +56,6 @@ const EditColorForm = ({ params }) => {
 
     return (
         <div className="flex flex-col items-center mt-10 px-4 relative">
-            {/* Top-Right Back Button */}
             <div className="w-full max-w-2xl flex justify-end mb-4">
                 <Link href="/admin/color">
                     <button className="flex  items-center gap-2 cursor-pointer bg-gray-100 text-blue-700 hover:bg-gray-200 px-4 py-2 rounded-lg font-medium shadow transition">
@@ -66,14 +65,12 @@ const EditColorForm = ({ params }) => {
                 </Link>
             </div>
 
-            {/* Form Card */}
             <div className="bg-white w-full max-w-2xl rounded-xl shadow-xl p-6 animate-scaleIn">
                 <h2 className="text-2xl cursor-pointer font-semibold text-gray-800 mb-6 text-center">
                     Edit Color
                 </h2>
 
                 <form onSubmit={submitHandler} className="space-y-5">
-                    {/* Category Name */}
                     <div>
                         <label className="block mb-1 text-gray-700 font-medium">
                             Color Name
@@ -89,7 +86,6 @@ const EditColorForm = ({ params }) => {
                         />
                     </div>
 
-                    {/* Description */}
                     <div>
                         <label className="block mb-1 text-gray-700 font-medium">
                             Color Slug
@@ -120,10 +116,8 @@ const EditColorForm = ({ params }) => {
                         <div className="my-4">{color?.Hexcode}</div>
                     </div>
 
-                    {/* Status */}
 
 
-                    {/* Submit Button */}
                     <div className="text-center">
                         <button
                             type="submit"

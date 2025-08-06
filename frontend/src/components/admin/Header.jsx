@@ -62,14 +62,22 @@ export default function Header() {
 
   function logoutHandler(e) {
     e.preventDefault();
-    axiosApiInstance.get("admin/logout", { withCredentials: true }).then(
-      () => {
-        dispatcher(removeAdmin())
-      }
-    ).catch(
-      () => { }
-    )
-    router.push("/admin-login");
+
+    // Perform the logout API call
+    axiosApiInstance.get("admin/logout", { withCredentials: true })
+      .then(() => {
+        // This block runs only if the API call is successful
+        dispatcher(removeAdmin()); // Clear the Redux state and localStorage
+        router.push("/admin-login"); // Redirect the user to the login page
+      })
+      .catch((error) => {
+        // Handle errors if the API call fails
+        console.error("Logout failed:", error);
+        // It's still good practice to clear the local state and redirect
+        // to prevent the user from being stuck in an invalid state.
+        dispatcher(removeAdmin());
+        router.push("/admin-login");
+      });
   }
 
   return (

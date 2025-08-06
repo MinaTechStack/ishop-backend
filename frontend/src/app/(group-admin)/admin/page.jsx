@@ -1,4 +1,3 @@
-// app/(group-admin)/admin/page.js
 'use client';
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -32,9 +31,6 @@ const Dashboard = () => {
             try {
                 setLoading(true);
                 setError(null);
-
-                // 🔑 No manual token handling or reading 'admin_token' from cookies here!
-                // The browser will automatically attach the 'admin_token' cookie
                 // to this request because axiosApiInstance has `withCredentials: true`.
                 const res = await axiosApiInstance.get("/order/all");
 

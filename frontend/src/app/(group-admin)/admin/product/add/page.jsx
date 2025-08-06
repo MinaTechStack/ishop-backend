@@ -92,7 +92,6 @@ const AddProductForm = () => {
         <div className="flex justify-center mt-12 px-4">
             <div className="w-full max-w-4xl bg-white rounded-2xl shadow-lg p-8 space-y-8">
 
-                {/* Header */}
                 <div className="flex justify-between items-center">
                     <h2 className="text-3xl font-bold text-gray-800">Add New Product</h2>
                     <Link href="/admin/product">
@@ -103,10 +102,8 @@ const AddProductForm = () => {
                     </Link>
                 </div>
 
-                {/* Form */}
                 <form onSubmit={submitHandler} className="space-y-6">
 
-                    {/* Product Name & Slug */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
@@ -120,7 +117,6 @@ const AddProductForm = () => {
                         </div>
                     </div>
 
-                    {/* Descriptions */}
                     <div className="space-y-4">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Short Description</label>
@@ -137,7 +133,6 @@ const AddProductForm = () => {
                         </div>
                     </div>
 
-                    {/* Pricing Section */}
                     <div>
                         <h3 className="text-lg font-semibold text-gray-700 mb-2">Pricing</h3>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -159,7 +154,6 @@ const AddProductForm = () => {
                         </div>
                     </div>
 
-                    {/* Category & Colors */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
@@ -193,7 +187,6 @@ const AddProductForm = () => {
                         </div>
                     </div>
 
-                    {/* Images */}
                     <div className="space-y-4">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Thumbnail Image</label>
@@ -202,27 +195,6 @@ const AddProductForm = () => {
                         </div>
 
                     </div>
-
-                    {/* Product Options */}
-                    {/* <div>
-                        <h3 className="text-lg font-semibold text-gray-700 mb-2">Options</h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                            <div className="flex items-center gap-2">
-                                <input type="checkbox" id="stock" className="w-4 h-4" />
-                                <label htmlFor="stock" className="text-sm font-medium text-gray-700">In Stock</label>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <input type="checkbox" id="topSelling" className="w-4 h-4" />
-                                <label htmlFor="topSelling" className="text-sm font-medium text-gray-700">Top Selling</label>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <input type="checkbox" id="status" defaultChecked className="w-4 h-4" />
-                                <label htmlFor="status" className="text-sm font-medium text-gray-700">Active</label>
-                            </div>
-                        </div>
-                    </div> */}
-
-                    {/* Submit Button */}
                     <div className="text-center pt-4">
                         <button type="submit"
                             className="bg-blue-600 cursor-pointer hover:bg-blue-700 text-white text-sm font-medium px-6 py-3 rounded-md shadow transition transform hover:scale-105">

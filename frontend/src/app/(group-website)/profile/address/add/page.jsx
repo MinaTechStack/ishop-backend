@@ -9,7 +9,7 @@ const AddAddress = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const index = searchParams.get('index'); // index as string or null
+  const index = searchParams.get('index');  
   const user = useSelector((state) => state.user.data);
 
   const [address, setAddress] = useState({
@@ -24,7 +24,6 @@ const AddAddress = () => {
 
   const [loading, setLoading] = useState(false);
 
-  // Redirect to login if user not found
   useEffect(() => {
     if (!user?._id) {
       notify('Please login first', 'error');
@@ -32,7 +31,6 @@ const AddAddress = () => {
     }
   }, [user, router]);
 
-  // Prefill form if editing
   useEffect(() => {
     if (index !== null && user?.shipping_address?.[index]) {
       setAddress(user.shipping_address[index]);
@@ -51,7 +49,7 @@ const AddAddress = () => {
       const payload = {
         userId: user._id,
         address,
-        ...(index !== null ? { index: Number(index) } : {}) // only add index if editing
+        ...(index !== null ? { index: Number(index) } : {})  
       };
 
       const res = await axiosApiInstance.post('/user/add-address', payload);

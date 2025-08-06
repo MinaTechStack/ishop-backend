@@ -88,7 +88,6 @@ export default function OrderDetailPage() {
         </div>
       </div>
 
-      {/* Shipping Address */}
       <div className="bg-white shadow-md rounded-2xl p-6">
         <h2 className="text-xl font-semibold mb-4">Shipping Address</h2>
         <div className="text-gray-700 leading-relaxed">

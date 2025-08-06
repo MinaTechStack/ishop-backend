@@ -16,7 +16,6 @@ const Checkout = () => {
   const [addresses, setAddresses] = useState(user?.data?.shipping_address || []);
   const router = useRouter();
 
-  // ✅ Load Razorpay script dynamically
   useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
@@ -64,7 +63,6 @@ const Checkout = () => {
           dispatch(emptyCart());
           router.push(`/thank-you/${res.data.order_id}`);
         } else {
-          // ✅ Use Razorpay via window object
           const options = {
             key: process.env.NEXT_PUBLIC_KEY_ID,
             currency: "INR",
@@ -188,7 +186,6 @@ const Checkout = () => {
               </Link>
             </div>
 
-            {/* Payment Mode Section */}
             <div className="mt-8">
               <h2 className="text-lg font-semibold text-gray-700 mb-4">Select Payment Mode</h2>
               <div className="flex gap-4">
@@ -214,7 +211,6 @@ const Checkout = () => {
             </div>
           </div>
 
-          {/* Right Section - Order Summary */}
           <div className="w-full md:w-1/3">
             <h3 className="text-base font-bold text-black mb-4">Order Summary</h3>
             <div className="bg-[#F9FAFB] border border-[#E5E7EB] p-4 rounded shadow-sm space-y-3 text-sm">
