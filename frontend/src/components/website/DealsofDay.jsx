@@ -99,11 +99,14 @@ export default function DealsofDay() {
         </div>
 
         {/* Side Banners */}
-        <div className="space-y-4 w-full lg:w-[296px]">
-          <img src="/deal1.png" alt="Deal 1" className="w-full h-[130px] rounded-xl object-cover" />
-          <img src="/deal2.png" alt="Deal 2" className="w-full h-[130px] rounded-xl object-cover" />
-          <img src="/deal3.png" alt="Deal 3" className="w-full h-[130px] rounded-xl object-cover" />
+        <div className="space-y-4 w-full md:w-full lg:w-[296px] flex flex-col items-center justify-center">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-1 gap-4 w-full">
+                <img src="/deal1.png" alt="Deal 1" className="w-full h-auto rounded-xl object-cover" />
+                <img src="/deal2.png" alt="Deal 2" className="w-full h-auto rounded-xl object-cover" />
+                <img src="/deal3.png" alt="Deal 3" className="w-full h-auto rounded-xl object-cover" />
+            </div>
         </div>
+
       </div>
     </section>
   );

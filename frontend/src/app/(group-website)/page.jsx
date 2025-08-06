@@ -105,7 +105,7 @@ export default function HomePage() {
           <ProductSlider title="💎 Highly Rated Picks" products={topRatedProducts} />
           <ProductSlider title="💫 Customer’s Choice" products={fanFavorites} />
 
-          {/* All Products */}
+           
           <section className="bg-pink-50 py-12 rounded-xl text-center">
             <h2 className="text-3xl font-bold text-gray-800 mb-2">How It Works</h2>
             <p className="text-sm text-gray-600 mb-8">Just Pick, Pack and Ship</p>
